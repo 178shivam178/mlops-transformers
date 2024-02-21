@@ -1,0 +1,18 @@
+stages:
+  load_data:
+    cmd: python src/load_data.py --config=params.yaml
+    deps:
+    - src/get_data.py
+    - src/load_data.py
+    - data_given/IMDB_Dataset.csv
+    outs:
+    - data/raw/IMDB_Dataset.csv
+
+  split_data:
+    cmd: python src/split_data.py --config=params.yaml
+    deps:
+    - src/split_data.py
+    - data/raw/IMDB_Dataset.csv
+    outs:
+    - data/processed/train_IMDB_Dataset.csv
+    - data/processed/test_IMDB_Dataset.csv 

@@ -1,0 +1,42 @@
+schema: '2.0'
+stages:
+  load_data:
+    cmd: python src/load_data.py --config=params.yaml
+    deps:
+    - path: data_given/IMDB_Dataset.csv
+      hash: md5
+      md5: 308443a50e5c993e7b8a1cdb95750026
+      size: 66212309
+    - path: src/get_data.py
+      hash: md5
+      md5: df767b9dea49df6a6f7a91b6655dc5b2
+      size: 612
+    - path: src/load_data.py
+      hash: md5
+      md5: 9dd46f456f237a96b6c6b7f1415ee4bf
+      size: 581
+    outs:
+    - path: data/raw/IMDB_Dataset.csv
+      hash: md5
+      md5: 325be553cb5850b6e67a01e716c3b3e8
+      size: 66262310
+  split_data:
+    cmd: python src/split_data.py --config=params.yaml
+    deps:
+    - path: data/raw/IMDB_Dataset.csv
+      hash: md5
+      md5: 325be553cb5850b6e67a01e716c3b3e8
+      size: 66262310
+    - path: src/split_data.py
+      hash: md5
+      md5: 7248a8665a69abcb7b8b2cc3c368afd9
+      size: 1040
+    outs:
+    - path: data/processed/test_IMDB_Dataset.csv
+      hash: md5
+      md5: 5e76c3581eaf74ee7a76aa3fe8297240
+      size: 13293638
+    - path: data/processed/train_IMDB_Dataset.csv
+      hash: md5
+      md5: 489ea286401f6c906a53b7810b55737c
+      size: 52968690
