@@ -1,17 +1,24 @@
-import config
+import src.transformer_code.config
 import torch
 import flask
 import time
 from flask import Flask
 from flask import request
-from model import BERTBaseUncased
+from src.transformer_code.model import BERTBaseUncased
 import numpy as np
 import torch.nn as nn
 
+DEVICE = "cpu"
+MODEL_PATH = "model/model.bin"
+MODEL = BERTBaseUncased()
+MODEL.load_state_dict(torch.load(src.transformer_code.config.MODEL_PATH,map_location=torch.device('cpu')))
+MODEL.to(DEVICE)
+MODEL.eval()
+
 
 def sentence_prediction(sentence):
-    tokenizer = config.TOKENIZER
-    max_len = config.MAX_LEN
+    tokenizer = src.transformer_code.config.TOKENIZER
+    max_len = src.transformer_code.config.MAX_LEN
     text = str(sentence)
     text = " ".join(text.split())
 
@@ -39,5 +46,5 @@ def sentence_prediction(sentence):
     outputs = MODEL(ids=ids, mask=mask, token_type_ids=token_type_ids)
 
     outputs = torch.sigmoid(outputs).cpu().detach().numpy()
-    outputs_resp = np.array(outputs[0][0]) >= 0.5
-    return outputs_resp
+    sentiment_predictions = ['positive' if pred >= 0.5 else 'negative' for pred in outputs]
+    return sentiment_predictions[0]

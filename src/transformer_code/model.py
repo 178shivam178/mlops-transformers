@@ -1,4 +1,4 @@
-from transformer_code import config
+from src.transformer_code import config
 import transformers
 import torch.nn as nn
 
